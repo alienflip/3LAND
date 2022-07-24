@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html  style="background-color: black;">
+	<head style="background-color: black;">
+		<title>3LAND</title>
+		<style>
+			body {
+				overflow: hidden;
+				margin: 0;
+				background-color: black;
+			}
+			.ui {
+				position: absolute;
+			}
+			button {
+				transition: all .5s ease;
+				color: #fff;
+				border: 3px solid white;
+				font-family:'Montserrat', sans-serif;
+				text-transform: uppercase;
+				text-align: center;
+				line-height: 1;
+				font-size: 17px;
+				background-color : transparent;
+				padding: 10px;
+				outline: none;
+				border-radius: 4px;
+				margin: 20px;
+				z-index: 99;
+			}
+			
+			button:hover {
+				color: #001F3F;
+				background-color: #fff;
+			}
+		</style>
+		<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+	</head>
+	<body style="background-color: black;" class = "animate__animated animate__backInDown animate_slower">
+		<button style="top:5%; right: 1%" id="blog" class="ui">Blog</button>
+
+		<button style="bottom: 5%; right:1%" id="wolfram1" class="ui">NFT Trading Analytics</button>
+		<button style="bottom:13%; right: 1%" id="algo" class="ui">Public Speaking</button>
+		<button style="bottom:21%; right: 1%" id="zkdao" class="ui">z-k DAO</button>
+		<button style="bottom:29%; right: 1%" id="soc" class="ui">SoC</button>
+
+		<button style="left:1%; bottom: 5%" id="julia" class="ui">Fractals</button>
+		<button style="left:1%; bottom: 13%" id="gameoflife" class="ui">Game of Life</button>
+		<button style="left:1%; bottom: 21%" id="E8" class="ui">8-D Symmetry</button>
+		<button style="left:1%; bottom: 29%" id="wolfram" class="ui">Particle Modelling</button>
+
+		<script src="three.js"></script>
+		<div class = "main">
+			<script>
+
+				var reset;
+				var test;
+				var reset_;
+				var test_;
+
+				// button handling
+				var buttons = document.getElementsByTagName("button");
+				for (let i = 0; i < buttons.length; i++) {
+					buttons[i].addEventListener("click", onButtonClick, false);
+				};
+				function onButtonClick(event) {
+					if(event.target.id === "zkdao"){
+						window.location.href = "https://talk.harmony.one/t/degendeploy-anonymous-contract-deployment-protocol/18350";
+					}
+					if(event.target.id === "algo"){
+						window.location.href = "https://www.youtube.com/watch?v=w-mOFqMcvdE&t=22099s";
+					}
+					if(event.target.id === "randomNums"){
+						window.location.href = "https://github.com/alienflip/Assembly/tree/main/x86";
+					}
+					if(event.target.id === "Hardware"){
+						window.location.href = "https://hackaday.io/project/179578-beat-pad";
+					}
+					if(event.target.id === "julia"){
+						window.location.href = "julia.html";
+					}
+					if(event.target.id === "E8"){
+						window.location.href = "E8.html";
+					}
+					if(event.target.id === "gameoflife"){
+						window.location.href = "gameoflife.html";
+					}
+					if(event.target.id === "wolfram"){
+						window.location.href = "wolframResearch.html";
+					}
+					if(event.target.id === "wolfram1"){
+						window.location.href = "https://community.wolfram.com/groups/-/m/t/2313877";
+					}
+					if(event.target.id === "QuantumAddendum"){
+						window.location.href = "projectAddendum.html";
+					}
+					if(event.target.id === "blog"){
+						window.location.href = "https://flashy-snowdrop-980.notion.site/b6326924ff594b159ecbd66e8447cb5d?v=c1e58698c61e4b2d90e51f6352af1bc5";
+					}
+					if(event.target.id === "soc"){
+						window.location.href = "https://github.com/alienflip/deep-Robo";
+					}
+				}
+
+			</script>
+			<script>
+				window.onload = reset;
+				///main animation
+				/// basic class invokations
+				const scene = new THREE.Scene();
+
+				const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+	
+				const renderer = new THREE.WebGLRenderer();
+				renderer.setPixelRatio(window.devicePixelRatio);
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				document.body.appendChild( renderer.domElement );
+
+				/// geometry elements
+				const geometry__ = new THREE.TorusKnotGeometry( 1, .2, 100, 13, 4, 6 );
+				const material__ = new THREE.MeshBasicMaterial( { color: 0x0827F5} );
+				const torusKnot = new THREE.Mesh( geometry__, material__ );
+				
+				const _geometry_ = new THREE.IcosahedronGeometry();
+				const _material_ = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+				const ico = new THREE.Mesh( _geometry_, _material_ );
+
+				const geometry = new THREE.TetrahedronGeometry();
+				const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+				const tet = new THREE.Mesh( geometry, material );
+				
+				/// three body problem, runge kutta method
+				var elements = {
+					torus:[],
+					ico:[],
+					tet:[],
+					vel_tor:[],
+					vel_ico:[],
+					vel_tet:[]
+				}
+
+				const torus_mass = 0.13;
+				const ico_mass = 0.15;
+				const tet_mass = 0.17;
+				elements.torus.z = torus_mass;
+				elements.ico.z = ico_mass;
+				elements.tet.z = tet_mass;
+
+				var t = 0;
+				var step = 0;
+				function reset(p, q, r, a, b, c){
+
+					cancelAnimationFrame( animate );
+
+					if(t === 0){
+						torusKnot.position.x = 11;
+						torusKnot.position.y = 2;
+						ico.position.x = -14;
+						ico.position.y = 12;
+						tet.position.x = 12;
+						tet.position.y = -3;
+					}else{
+						torusKnot.position.x = 11 + p;
+						torusKnot.position.y = 2 + a;
+						ico.position.x = -14 + q;
+						ico.position.y = 12 + b;
+						tet.position.x = 12 + c;
+						tet.position.y = -3 + r;
+					}
+
+					elements.torus.x = torusKnot.position.x;
+					elements.torus.y = torusKnot.position.y;
+					elements.ico.x = ico.position.x;
+					elements.ico.y = ico.position.y;
+					elements.tet.x = tet.position.x;
+					elements.tet.y = tet.position.y;
+					elements.vel_tor.x = 0;
+					elements.vel_tor.y = 0;
+					elements.vel_ico.x = 0;
+					elements.vel_ico.y = 0;
+					elements.vel_tet.x = 0;
+					elements.vel_tet.y = 0;
+
+					step = 0;
+					t = 0;
+					
+					animate();
+
+				}
+
+				// functions and classes for three body problem approximation calculations
+				const G = -1;
+
+				function squared(x){
+					return x * x;
+				}
+
+				function cubed(x){
+					return x * x * x;
+				}
+
+				function distance(x_1, x_2, y_1, y_2){
+					var x = squared(x_1 - x_2);
+					var y = squared(y_1 - y_2);
+					return Math.sqrt(x + y);
+				}
+
+				// decides which acceleration to calculate
+				class equations_of_motion{
+					constructor (type, x_a, x_b, x_c, y_a, y_b, y_c, m_a, m_b, dist_a, dist_b){
+						this.type = type;
+					}
+
+					get _motion_x(){
+						this.check();
+						return this.motion_x();
+					}
+
+					get _motion_y(){
+						this.check();
+						return this.motion_y();
+					}
+
+					check(){
+						if(this.type === "torus"){
+							this.x_a = elements.torus.x;
+							this.x_b = elements.ico.x;
+							this.x_c = elements.tet.x;
+							this.y_a = elements.torus.y;
+							this.y_b = elements.ico.y;
+							this.y_c = elements.tet.y;
+
+							this.m_a = elements.ico.z;
+							this.m_b = elements.tet.z;
+						}
+						else if(this.type === "ico"){
+							this.x_a = elements.ico.x;
+							this.x_b = elements.tet.x;
+							this.x_c = elements.torus.x;
+							this.y_a = elements.ico.y;
+							this.y_b = elements.tet.y;
+							this.y_c = elements.torus.y;
+
+							this.m_a = elements.tet.z;
+							this.m_b = elements.torus.z;
+						}
+						else if(this.type === "tet"){
+							this.x_a = elements.tet.x;
+							this.x_b = elements.torus.x;
+							this.x_c = elements.ico.x;
+							this.y_a = elements.tet.y;
+							this.y_b = elements.torus.y;
+							this.y_c = elements.ico.y;
+
+							this.m_a = elements.torus.z;
+							this.m_b = elements.ico.z;
+						}
+						else{
+							return null;
+						}
+						this.dist_a = cubed(distance(this.x_a, this.x_b, this.y_a, this.y_b));
+						this.dist_b = cubed(distance(this.x_a, this.x_c, this.y_a, this.y_c));
+						
+						if(this.dist_a < 0.5){
+							this.dist_a += 0.1;
+						}
+						if(this.dist_b < 0.5){
+							this.dist_b += 0.1;
+						}
+					}
+
+					motion_x(){
+						var num_a = this.x_a - this.x_b;
+						var num_b = this.x_a - this.x_c;
+						var accel_x = (G * this.m_a * (num_a)/(this.dist_a)) + (G * this.m_b * (num_b)/(this.dist_b));
+						return accel_x;
+					}
+					
+					motion_y(){
+						var num_a = this.y_a - this.y_b;
+						var num_b = this.y_a - this.y_c;
+						var accel_y = (G * this.m_a * (num_a)/(this.dist_a)) + (G * this.m_b * (num_b)/(this.dist_b));
+						return accel_y;
+					}
+				}
+
+				/// basic camera adjust and adding geometries 
+				scene.add( torusKnot );
+				scene.add( ico );
+				scene.add( tet );
+				camera.position.z = 60;
+
+				/// animation handling
+				renderer.render( scene, camera );
+			
+				
+
+				var animate = function () {
+					requestAnimationFrame( animate );
+
+					torusKnot.rotation.x += 0.01;
+					torusKnot.rotation.y += 0.01;
+					ico.rotation.x += 0.01;
+					ico.rotation.y += 0.01;
+					tet.rotation.x += 0.01;
+					tet.rotation.y += 0.01;
+
+					// using suvat equations with the three body gravitational acceleration
+
+					var equations_ico = new equations_of_motion(type = "ico");
+					var equations_torus = new equations_of_motion(type = "torus");
+					var equations_tet = new equations_of_motion(type = "tet");
+
+					var dx_t = elements.vel_tor.x * step + 0.5 * equations_torus._motion_x * squared(step);
+					var dy_t = elements.vel_tor.y * step + 0.5 * equations_torus._motion_y * squared(step);
+					torusKnot.position.x = elements.torus.x + dx_t;
+					torusKnot.position.y = elements.torus.y + dy_t;
+					elements.torus.x = torusKnot.position.x;
+					elements.torus.y = torusKnot.position.y;
+					elements.vel_tor.x = elements.vel_tor.x + equations_torus._motion_x * step;
+					elements.vel_tor.y = elements.vel_tor.y + equations_torus._motion_y * step;
+
+					var dx_i = elements.vel_ico.x * step + 0.5 * equations_ico._motion_x * squared(step);
+					var dy_i = elements.vel_ico.y * step + 0.5 * equations_ico._motion_y * squared(step);
+					ico.position.x = elements.ico.x + dx_i;
+					ico.position.y = elements.ico.y + dy_i;
+					elements.ico.x = ico.position.x;
+					elements.ico.y = ico.position.y;
+					elements.vel_ico.x = elements.vel_ico.x + equations_ico._motion_x * step;
+					elements.vel_ico.y = elements.vel_ico.y + equations_ico._motion_y * step;
+
+					var dx_te = elements.vel_tet.x * step + 0.5 * equations_tet._motion_x * squared(step);
+					var dy_te = elements.vel_tet.y * step + 0.5 * equations_torus._motion_y * squared(step);
+					tet.position.x = elements.tet.x + dx_te;
+					tet.position.y = elements.tet.y + dy_te;
+					elements.tet.x = tet.position.x;
+					elements.tet.y = tet.position.y;
+					elements.vel_tet.x = elements.vel_tet.x + equations_tet._motion_x * step;
+					elements.vel_tet.y = elements.vel_tet.y + equations_tet._motion_y * step;
+
+					step += 0.001;
+
+					renderer.render( scene, camera );
+				};
+
+			</script>
+		</div>
+	</body>
+</html>

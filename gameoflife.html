@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<hmtl class = "animate__animated animate__bounceInLeft animate_slower" style="background-color: black;">
+    <head>
+        <style>
+            .mcanvas{
+                border: 1px solid black;
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                top: 5px;
+                left: 1px;
+                right: 1px;
+                bottom: 1px;
+            }
+            #grid{
+                position: absolute;
+                width: 95%;
+                height: 95%;
+                border: 0px solid black;
+                margin:2px;
+            }
+            button {
+				transition: all .5s ease;
+				color: #fff;
+				border: 3px solid white;
+				font-family:'Montserrat', sans-serif;
+				text-transform: uppercase;
+				text-align: center;
+				line-height: 1;
+				font-size: 17px;
+				background-color : black;
+				padding: 10px;
+				outline: none;
+				border-radius: 4px;
+				margin: 20px;
+                z-index: 99;
+                position: absolute;
+			}
+			
+			button:hover {
+				color: #001F3F;
+				background-color: #fff;
+			}
+        </style>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <button style="left:1%" id="main">Main</button>
+        <a style="bottom: 1%; left: 2%; position: absolute;">https://alienflip.itch.io/</a>
+        <div class = "mcanvas">
+            <canvas id = "grid">
+                <script>
+                    var buttons = document.getElementsByTagName("button");
+                    for (let i = 0; i < buttons.length; i++) {
+                        buttons[i].addEventListener("click", onButtonClick, false);
+                    };
+                    function onButtonClick(event) {
+                        if(event.target.id === "main"){
+                            window.location.href = "index.html";
+                        }
+                    }
+                </script>
+            </canvas>
+        </div>
+        <script type = "text/javascript" src = "gameoflife.js"></script>
+    </body>
+</html>
